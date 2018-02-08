@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 08, 2018 at 12:13 PM
+-- Generation Time: Feb 08, 2018 at 01:20 PM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `title` varchar(256) NOT NULL,
   `image_url` varchar(256) DEFAULT NULL,
   `description` varchar(1024) NOT NULL,
-  `start_date` date NOT NULL,
+  `start_datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `duration` int(11) NOT NULL,
   `category` varchar(32) NOT NULL,
   `funding_goal` int(11) NOT NULL,
