@@ -1,17 +1,16 @@
-<?php 
-$servername="localhost";
-$dbAdmin="root";
-$password="";
-$dbname="dreamfactory";
+<?php
 
-//Create connection 
-$conn=new mysqli($servername, $dbAdmin, $password,$dbname);
+$host = "localhost";
+$username = "root";
+$password = "";
+$db = "dreamfactory";
 
-//check connection
-if ($conn->connect_error){
-		die("Connection failed: " . $conn->connect_error);
-		echo "connection failed";
-}else{
-	echo "connected to db";
+// Create connection 
+$conn = new mysqli($host, $username, $password, $db);
+
+// Check connection
+if ($conn->connect_error) {
+	die("Connection failed: " . $conn->connect_error);
 }
+
 ?>
