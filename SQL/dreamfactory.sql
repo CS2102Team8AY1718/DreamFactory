@@ -150,6 +150,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
   `password_hash` varchar(64) NOT NULL,
+  `full_name` varchar(255) NOT NULL,
+  `privilege` tinyint(1) NOT NULL DEFAULT '0',
   `session_id` varchar(32) DEFAULT NULL,
   `session_exp` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`user_id`),
