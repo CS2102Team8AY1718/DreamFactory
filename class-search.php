@@ -10,7 +10,7 @@ class search {
   }
  
   private function connect() {
-    $this->mysqli = new mysqli( 'localhost', 'root', 'password', 'dreamfactory' );
+    $this->mysqli = new mysqli( 'localhost', 'root', '', 'dreamfactory' );
   }
   
   //Performs a search
@@ -21,7 +21,7 @@ class search {
     $query = $this->mysqli->query("
       SELECT title
       FROM project_keywords pk NATURAL JOIN projects p
-      WHERE keyword LIKE '%{$keyword}%' AND p.project_id = pk.project_id
+      WHERE keyword LIKE '%{$keyword}%'
     ");
     
     // Check results
