@@ -78,6 +78,7 @@ if (!isset($retry) || $retry) {
 include 'footer.php';
 
 ?>
-
+	<a href="register.php">Register</a>
+    <a href="search.php">Search</a>
     </body>
 </html>
