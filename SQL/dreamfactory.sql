@@ -42,39 +42,14 @@ CREATE TABLE IF NOT EXISTS `categories` (
 
 DROP TABLE IF EXISTS `fundings`;
 CREATE TABLE IF NOT EXISTS `fundings` (
-  `funder_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `project_id` int(11) NOT NULL,
   `amount` int(11) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`funder_id`,`project_id`),
-  KEY `funder_id` (`funder_id`),
+  PRIMARY KEY (`user_id`,`project_id`),
+  KEY `user_id` (`user_id`),
   KEY `project_id` (`project_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Triggers `fundings`
---
-DROP TRIGGER IF EXISTS `trigger_before_delete_fundings`;
-DELIMITER $$
-CREATE TRIGGER `trigger_before_delete_fundings` BEFORE DELETE ON `fundings` FOR EACH ROW BEGIN
-	UPDATE projects SET funding_amount = funding_amount - OLD.amount WHERE project_id = OLD.project_id;
-END
-$$
-DELIMITER ;
-DROP TRIGGER IF EXISTS `trigger_before_insert_fundings`;
-DELIMITER $$
-CREATE TRIGGER `trigger_before_insert_fundings` BEFORE INSERT ON `fundings` FOR EACH ROW BEGIN
-	UPDATE projects SET funding_amount = funding_amount + NEW.amount WHERE project_id = NEW.project_id;
-END
-$$
-DELIMITER ;
-DROP TRIGGER IF EXISTS `trigger_before_update_fundings`;
-DELIMITER $$
-CREATE TRIGGER `trigger_before_update_fundings` BEFORE UPDATE ON `fundings` FOR EACH ROW BEGIN
-	UPDATE projects SET funding_amount = funding_amount - OLD.amount + NEW.amount WHERE project_id = NEW.project_id;
-END
-$$
-DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -97,32 +72,18 @@ CREATE TABLE IF NOT EXISTS `keywords` (
 DROP TABLE IF EXISTS `projects`;
 CREATE TABLE IF NOT EXISTS `projects` (
   `project_id` int(11) NOT NULL AUTO_INCREMENT,
-  `creator_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `title` varchar(256) NOT NULL,
   `image_url` varchar(256) DEFAULT NULL,
   `description` varchar(1024) NOT NULL,
-  `start_datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `duration` int(11) NOT NULL,
+  `end_datetime` datetime NOT NULL,
   `category` varchar(32) NOT NULL,
   `funding_goal` int(11) NOT NULL,
-  `funding_amount` int(11) NOT NULL DEFAULT '0',
-  `is_funded` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`project_id`),
   UNIQUE KEY `title` (`title`),
   KEY `category` (`category`),
-  KEY `creator_id` (`creator_id`)
+  KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Triggers `projects`
---
-DROP TRIGGER IF EXISTS `trigger_is_funded`;
-DELIMITER $$
-CREATE TRIGGER `trigger_is_funded` BEFORE UPDATE ON `projects` FOR EACH ROW BEGIN
-	SET NEW.is_funded = NEW.funding_amount >= NEW.funding_goal;
-END
-$$
-DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -167,14 +128,14 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 ALTER TABLE `fundings`
   ADD CONSTRAINT `fk_fundings_projects_project_id` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_fundings_users_funder_id` FOREIGN KEY (`funder_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_fundings_users_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `projects`
 --
 ALTER TABLE `projects`
   ADD CONSTRAINT `fk_projects_categories_category` FOREIGN KEY (`category`) REFERENCES `categories` (`category`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_projects_users_creator_id` FOREIGN KEY (`creator_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_projects_users_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `project_keywords`

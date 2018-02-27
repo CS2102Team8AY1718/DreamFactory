@@ -12,9 +12,9 @@ SELECT
     title,
     category,
     kl.keyword_links AS keywords,
-    funding_amount,
+    COALESCE(f.fundings, 0) AS funding_amount,
     funding_goal,
-    DATE_ADD(start_datetime, INTERVAL duration DAY) AS end_datetime
+    end_datetime
 FROM
     projects p LEFT JOIN
     (SELECT
@@ -23,9 +23,16 @@ FROM
     FROM
         project_keywords
     GROUP BY
-        project_id) AS kl ON p.project_id = kl.project_id
+        project_id) AS kl ON p.project_id = kl.project_id LEFT JOIN
+    (SELECT
+        project_id,
+        SUM(amount) AS fundings
+    FROM
+        fundings
+    GROUP BY
+        project_id) AS f ON p.project_id = f.project_id
 WHERE
-    is_funded = 1
+    COALESCE(f.fundings, 0) >= p.funding_goal
 ";
 
 if (isset($keyword)) {
@@ -52,9 +59,9 @@ SELECT
     title,
     category,
     kl.keyword_links AS keywords,
-    funding_amount,
+    COALESCE(f.fundings, 0) AS funding_amount,
     funding_goal,
-    DATE_ADD(start_datetime, INTERVAL duration DAY) AS end_datetime
+    end_datetime
 FROM
     projects p LEFT JOIN
     (SELECT
@@ -63,9 +70,17 @@ FROM
     FROM
         project_keywords
     GROUP BY
-        project_id) AS kl ON p.project_id = kl.project_id
+        project_id) AS kl ON p.project_id = kl.project_id LEFT JOIN
+    (SELECT
+        project_id,
+        SUM(amount) AS fundings
+    FROM
+        fundings
+    GROUP BY
+        project_id) AS f ON p.project_id = f.project_id
 WHERE
-    is_funded = 0
+    COALESCE(f.fundings, 0) < p.funding_goal AND
+    p.end_datetime > CURDATE()
 ";
 
 if (isset($keyword)) {
@@ -84,6 +99,8 @@ if ($result = $conn->query($sql_select_unfunded_projects)) {
     while ($row = $result->fetch_assoc()) {
         array_push($unfunded_projects, $row);
     }
+} else {
+    echo $conn->error;
 }
 
 ?>
