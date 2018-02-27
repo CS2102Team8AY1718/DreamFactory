@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `duration` int(11) NOT NULL,
   `category` varchar(32) NOT NULL,
   `funding_goal` int(11) NOT NULL,
-  `funding_amount` int(11) NOT NULL,
+  `funding_amount` int(11) NOT NULL DEFAULT '0',
   `is_funded` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`project_id`),
   UNIQUE KEY `title` (`title`),
