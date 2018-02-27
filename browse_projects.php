@@ -99,8 +99,6 @@ if ($result = $conn->query($sql_select_unfunded_projects)) {
     while ($row = $result->fetch_assoc()) {
         array_push($unfunded_projects, $row);
     }
-} else {
-    echo $conn->error;
 }
 
 ?>
