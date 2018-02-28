@@ -40,6 +40,7 @@ if (isset($_POST['login'])) {
 				session_start();
 				$_SESSION['logged_in'] =true;
 				$_SESSION['email']=$email;
+				$_SESSION['fullname']=$row['full_name'];
             } else {
                 echo "Invalid email and password combination.";
                 $retry = true;
