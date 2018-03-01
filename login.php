@@ -37,6 +37,10 @@ if (isset($_POST['login'])) {
                 $row = $result->fetch_assoc();
                 echo "Login successful. Welcome back, " . $row['full_name'] . ".";
                 $retry = false;
+				session_start();
+				$_SESSION['logged_in'] =true;
+				$_SESSION['email']=$email;
+				$_SESSION['fullname']=$row['full_name'];
             } else {
                 echo "Invalid email and password combination.";
                 $retry = true;

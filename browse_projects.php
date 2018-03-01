@@ -1,6 +1,22 @@
 <?php
 
 require 'connect.php';
+session_start();
+if(isset($_SESSION['logged_in'])){
+	if($_SESSION['logged_in'] ==true){
+	 $logged_in = true;
+	} else {
+		$logged_in = false;
+	}
+}else{
+	$logged_in=false;
+}
+
+if($logged_in ==true){
+	echo 'Logged in as: ',$_SESSION['fullname'];
+}else {
+	echo '<a href="login.php">Login</a>';
+}
 
 if (isset($_GET['keyword'])) {
     $keyword = mysqli_real_escape_string($conn, $_GET['keyword']);
