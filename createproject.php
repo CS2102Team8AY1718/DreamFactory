@@ -5,9 +5,9 @@
         <title>Create Project</title>
     </head>
     <body>
-	<?php
+<?php
 	
-	require 'connect.php';
+require 'connect.php';
 session_start();
 
 if(isset($_SESSION['logged_in'])){
@@ -79,6 +79,7 @@ if ($result = $conn->query($sql_select_user_id)) {
             </form>
         </fieldset>';	
 		
+$error_message="";
 if(isset($_POST['createproj'])){
 	$title= mysqli_real_escape_string($conn, $_POST['title']);
 	$imgurl=mysqli_real_escape_string($conn, $_POST['image']);
@@ -86,9 +87,16 @@ if(isset($_POST['createproj'])){
 	$enddate=strtotime($_POST["enddate"]);
 	$category=mysqli_real_escape_string($conn, $_POST['category']);
 	$keyword=mysqli_real_escape_string($conn, $_POST['keyword']);
+	
+	//get user_id
+	$sql_select_userid = "SELECT user_id FROM users WHERE email='$_SESSION['email']'";
+	
+	
 }else{
 	echo 'Fill in all the fields';
 }
+
+
 ?>
 	</body>
 </html>
