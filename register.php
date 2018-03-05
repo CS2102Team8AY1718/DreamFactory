@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>Registration Page</title>
     </head>
-    <body>
+</html>
 
 <?php
 
@@ -43,7 +43,7 @@ if (isset($_POST['register'])) {
 
         // Check for sql error
         if ($conn->query($sql_insert_user)) {
-            echo "You have been registered. You can now <a href='login.php'>login</a>.";
+            echo "You have been registered. You can now <a href='login.php?redirect=homepage.php'>login</a>.";
             $retry = false;
         } else {
             echo "An account with that email has been found. Have you <a href='forgot_password.php'>forgotten your password</a>?";
@@ -88,6 +88,3 @@ if (!isset($retry) || $retry) {
 include 'footer.php';
 
 ?>
-
-    </body>
-</html>
