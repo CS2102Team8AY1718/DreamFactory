@@ -1,10 +1,95 @@
+<?php
+    
+    session_start();
+    require 'connect.php';
+
+    $sql_select_ongoing_projects = "
+    SELECT
+        p.project_id,
+        title,
+        image_url,
+        category,
+        kl.keyword_links AS keyword_links,
+        COALESCE(f.fundings, 0) AS funding_amount,
+        funding_goal,
+        end_datetime
+    FROM
+        projects p LEFT JOIN
+        (SELECT
+            project_id,
+            GROUP_CONCAT(CONCAT('<a href=browse_projects.php?keyword=', keyword, '>', keyword, '</a>') SEPARATOR ', ') AS keyword_links
+        FROM
+            project_keywords
+        GROUP BY
+            project_id) AS kl ON p.project_id = kl.project_id LEFT JOIN
+        (SELECT
+            project_id,
+            SUM(amount) AS fundings
+        FROM
+            fundings
+        GROUP BY
+            project_id) AS f ON p.project_id = f.project_id
+    WHERE
+        COALESCE(f.fundings, 0) < p.funding_goal AND
+        p.end_datetime > CURDATE()
+    ORDER BY
+        COALESCE(f.fundings, 0) * 1.0 / funding_goal DESC
+    LIMIT 3
+    ";
+
+    $sql_select_funded_projects = "
+    SELECT
+        p.project_id,
+        title,
+        image_url,
+        category,
+        kl.keyword_links AS keyword_links,
+        COALESCE(f.fundings, 0) AS funding_amount,
+        funding_goal,
+        end_datetime
+    FROM
+        projects p LEFT JOIN
+        (SELECT
+            project_id,
+            GROUP_CONCAT(CONCAT('<a href=browse_projects.php?keyword=', keyword, '>', keyword, '</a>') SEPARATOR ', ') AS keyword_links
+        FROM
+            project_keywords
+        GROUP BY
+            project_id) AS kl ON p.project_id = kl.project_id LEFT JOIN
+        (SELECT
+            project_id,
+            SUM(amount) AS fundings
+        FROM
+            fundings
+        GROUP BY
+            project_id) AS f ON p.project_id = f.project_id
+    WHERE
+        COALESCE(f.fundings, 0) >= p.funding_goal
+    ORDER BY
+        end_datetime DESC
+    LIMIT 3
+    ";
+
+    if ($result = $conn->query($sql_select_ongoing_projects)) {
+        $ongoing_projects = array();
+        while ($row = $result->fetch_assoc()) {
+            array_push($ongoing_projects, $row);
+        }
+    }
+
+    if ($result = $conn->query($sql_select_funded_projects)) {
+        $funded_projects = array();
+        while ($row = $result->fetch_assoc()) {
+            array_push($funded_projects, $row);
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-  
-  
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
-	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
 
     <meta charset="utf-8">
@@ -12,7 +97,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Crowd Funding</title>
+    <title>DreamFactory: Where Ideas Become Reality</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -26,291 +111,229 @@
 
     <!-- Custom styles for this template -->
     <link href="css/crowdfunding.min.css" rel="stylesheet">
-	
-  </head>
+</head>
 
-  <body id="page-top">
+<body id="page-top">
+    <?php
+        include 'header.php';
+    ?>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-      <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">Crowd Funding</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          Menu
-          <i class="fa fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav text-uppercase ml-auto">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="#page-top">DreamFactory</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fa fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav text-uppercase ml-auto">
 
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#ongoingProjects">Ongoing Projects</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#accomplishedProjects">Accomplished Projects</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#createProject">Create Project</a>
-            </li>
-			<li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#contact">Contact Us</a>
-            </li>
-			<li class="nav-item">
-			<?php
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#ongoingProjects">Ongoing Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#accomplishedProjects">Accomplished Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#createProject">Create Project</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#contact">Contact Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <?php
 
-			require 'connect.php';
-			session_start();
-			if(isset($_SESSION['logged_in'])){
-				if($_SESSION['logged_in'] ==true){
-				 $logged_in = true;
-				} else {
-					$logged_in = false;
-				}
-			}else{
-				$logged_in=false;
-			}
+                        if (isset($_SESSION['email'])) {
+                            echo '<a class="nav-link js-scroll-trigger" href="logout.php">Logout</a>';
+                        } else {
+                            echo '<a class="nav-link js-scroll-trigger" href="login.php?redirect=homepage.php">Login</a>';
+                        }
 
-			if($logged_in == true){
-				echo '<a class="nav-link js-scroll-trigger" href="logout.php">Log Out</a> ';
-			}else {
-				echo '<a class="nav-link js-scroll-trigger"href="login.php">Login</a>';
-			}
-
-			?>
-			</li>
-          </ul>
+                        ?>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
     </nav>
 
     <!-- Header -->
     <header class="masthead">
-      <div class="container">
-        <div class="intro-text">
-          <div class="intro-lead-in">Support New Start Ups!</div>
-          <div class="intro-heading text-uppercase">Funding Platform</div>
-		</div>
-      </div>
+        <div class="container">
+            <div class="intro-text">
+                <div class="intro-heading">DreamFactory</div>
+                <div class="intro-lead-in">Where Ideas Become Reality</div>
+            </div>
+        </div>
     </header>
 
     <!-- Ongoing Projects Grid -->
-	<!-- sql query to list top 3 projects that were just made-->
+    <!-- sql query to list top 3 projects that were just made-->
     <section class="bg-light" id="ongoingProjects">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <h2 class="section-heading text-uppercase">Ongoing Projects</h2>
-            <h3 class="section-subheading text-muted">Support these projects/ startups now!</h3>
-          </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading text-uppercase">Ongoing Projects</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <?php
+
+                foreach ($ongoing_projects as $ongoing_project) {
+                    echo '
+                        <div class="col-md-4 col-sm-6 portfolio-item">
+                            <div align="center">
+                                <a class="portfolio-link" data-toggle="modal" href="project1">
+                                    <img class="img-fluid" src="' . $ongoing_project['image_url'] . '" style="max-height: 200px; width: auto;">
+                                </a>
+                            </div>
+                            <div class="portfolio-caption">
+                                <br>
+                                <h4 align="center">' . $ongoing_project['title'] . '</h4>
+                                <p align="center" class="text-muted">' . $ongoing_project['keyword_links'] . '</p>
+                                <p align="center" class="text-muted">' . 100 * $ongoing_project['funding_amount'] / $ongoing_project['funding_goal'] . '% funded (<b>$' . $ongoing_project['funding_amount'] . '.00</b> of <b>$' . $ongoing_project['funding_goal'] . '.00)</b></p>
+                            </div>
+                        </div>
+                    ';
+                }
+
+                ?>
+            </div>
+
+            <br>
+            <center>
+                <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="browse_projects.php">Browse more...</a>
+            </center>
+
         </div>
-		
-        <div class="row">
-          <div class="col-md-4 col-sm-6 portfolio-item">
-            <a class="portfolio-link" data-toggle="modal" href="project1">
-              <div class="portfolio-hover">
-                <div class="portfolio-hover-content">
-                  <i class="fa fa-plus fa-3x"></i>
-                </div>
-              </div>
-              <img class="img-fluid" src="img/portfolio/01-thumbnail.jpg" alt="">
-            </a>
-            <div class="portfolio-caption">
-              <h4>Threads</h4>
-              <p class="text-muted">Project 1</p>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-6 portfolio-item">
-            <a class="portfolio-link" data-toggle="modal" href="project2">
-              <div class="portfolio-hover">
-                <div class="portfolio-hover-content">
-                  <i class="fa fa-plus fa-3x"></i>
-                </div>
-              </div>
-              <img class="img-fluid" src="img/portfolio/02-thumbnail.jpg" alt="">
-            </a>
-            <div class="portfolio-caption">
-              <h4>Explore</h4>
-              <p class="text-muted">Project 2</p>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-6 portfolio-item">
-            <a class="portfolio-link" data-toggle="modal" href="project3">
-              <div class="portfolio-hover">
-                <div class="portfolio-hover-content">
-                  <i class="fa fa-plus fa-3x"></i>
-                </div>
-              </div>
-              <img class="img-fluid" src="img/portfolio/03-thumbnail.jpg" alt="">
-            </a>
-            <div class="portfolio-caption">
-              <h4>Finish</h4>
-              <p class="text-muted">Project 3</p>
-            </div>
-          </div>
-		</div>
-		
-		<br> <br>
-		<center>
-		<a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="browse_projects.php">Browse Other Projects</a>
-		</center>
-		
-      </div>
     </section>
 
     <!-- Accomplished Projects Grid -->
-	<!-- sql query to list top 3 projects that just ended -->
+    <!-- sql query to list top 3 projects that just ended -->
     <section id="accomplishedProjects">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <h2 class="section-heading text-uppercase">Accomplished Projects</h2>
-            <h3 class="section-subheading text-muted">Past funded projects.</h3>
-          </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading text-uppercase">Accomplished Projects</h2>
+                </div>
+            </div>
+            <div class="row">
+                <?php
+
+                foreach ($funded_projects as $funded_project) {
+                    echo '
+                        <div class="col-md-4 col-sm-6 portfolio-item">
+                            <a class="portfolio-link" data-toggle="modal" href="project1">
+                                <img class="img-fluid" src="img/portfolio/01-thumbnail.jpg" alt="">
+                            </a>
+                            <div class="portfolio-caption">
+                                <br>
+                                <h4 align="center">' . $funded_project['title'] . '</h4>
+                                <p align="center" class="text-muted">' . $funded_project['keyword_links'] . '</p>
+                                <p align="center" class="text-muted">' . 100 * $funded_project['funding_amount'] / $funded_project['funding_goal'] . '% funded (<b>$' . $funded_project['funding_amount'] . '.00</b> of <b>$' . $funded_project['funding_goal'] . '.00)</b></p>
+                            </div>
+                        </div>
+                    ';
+                }
+
+                ?>
+            </div>
+
+            <br>
+            <center>
+                <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="browse_projects.php">Browse more...</a>
+            </center>
         </div>
-		<div class="row">
-          <div class="col-md-4 col-sm-6 portfolio-item">
-            <a class="portfolio-link" data-toggle="modal" href="project1">
-              <div class="portfolio-hover">
-                <div class="portfolio-hover-content">
-                  <i class="fa fa-plus fa-3x"></i>
-                </div>
-              </div>
-              <img class="img-fluid" src="img/portfolio/01-thumbnail.jpg" alt="">
-            </a>
-            <div class="portfolio-caption">
-              <h4>Threads</h4>
-              <p class="text-muted">Project 1</p>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-6 portfolio-item">
-            <a class="portfolio-link" data-toggle="modal" href="project2">
-              <div class="portfolio-hover">
-                <div class="portfolio-hover-content">
-                  <i class="fa fa-plus fa-3x"></i>
-                </div>
-              </div>
-              <img class="img-fluid" src="img/portfolio/02-thumbnail.jpg" alt="">
-            </a>
-            <div class="portfolio-caption">
-              <h4>Explore</h4>
-              <p class="text-muted">Project 2</p>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-6 portfolio-item">
-            <a class="portfolio-link" data-toggle="modal" href="project3">
-              <div class="portfolio-hover">
-                <div class="portfolio-hover-content">
-                  <i class="fa fa-plus fa-3x"></i>
-                </div>
-              </div>
-              <img class="img-fluid" src="img/portfolio/03-thumbnail.jpg" alt="">
-            </a>
-            <div class="portfolio-caption">
-              <h4>Finish</h4>
-              <p class="text-muted">Project 3</p>
-            </div>
-          </div>
-		</div>
-      </div>
     </section>
-	
-	<!-- Create Project Grid -->
+
+    <!-- Create Project Grid -->
     <section id="createProject">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <h2 class="section-heading text-uppercase">Create Project</h2>
-            <h3 class="section-subheading text-muted">Kick start your startup with fundings now.</h3>
-          </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading text-uppercase">Create Project</h2>
+                    <h3 class="section-subheading text-muted">Kick start your startup with fundings now.</h3>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                        <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <h4 class="service-heading">E-Commerce</h4>
+                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                        <i class="fa fa-laptop fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <h4 class="service-heading">Start Ups</h4>
+                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                        <i class="fa fa-lock fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <h4 class="service-heading">Projects</h4>
+                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                </div>		
+            </div>
+
+            <br> <br>
+            <center>
+                <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="create_project.php">Create Project</a>
+            </center>
+
         </div>
-        <div class="row text-center">
-          <div class="col-md-4">
-            <span class="fa-stack fa-4x">
-              <i class="fa fa-circle fa-stack-2x text-primary"></i>
-              <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
-            </span>
-            <h4 class="service-heading">E-Commerce</h4>
-            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
-          </div>
-          <div class="col-md-4">
-            <span class="fa-stack fa-4x">
-              <i class="fa fa-circle fa-stack-2x text-primary"></i>
-              <i class="fa fa-laptop fa-stack-1x fa-inverse"></i>
-            </span>
-            <h4 class="service-heading">Start Ups</h4>
-            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
-          </div>
-          <div class="col-md-4">
-            <span class="fa-stack fa-4x">
-              <i class="fa fa-circle fa-stack-2x text-primary"></i>
-              <i class="fa fa-lock fa-stack-1x fa-inverse"></i>
-            </span>
-            <h4 class="service-heading">Projects</h4>
-            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
-          </div>		
-        </div>
-				  
-		  <br> <br>
-		<center>
-		<a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="browse_projects.php">Create Project</a>
-		</center>
-		
-      </div>
     </section>
 
     <!-- Contact -->
     <section id="contact">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <h2 class="section-heading text-uppercase">Contact Us</h2>
-            <h3 class="section-subheading text-muted">Drop us an email if you have any enquiries.</h3>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-12">
-            <form id="contactForm" name="sentMessage" novalidate>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <input class="form-control" id="name" type="text" placeholder="Your Name *" required data-validation-required-message="Please enter your name.">
-                    <p class="help-block text-danger"></p>
-                  </div>
-                  <div class="form-group">
-                    <input class="form-control" id="email" type="email" placeholder="Your Email *" required data-validation-required-message="Please enter your email address.">
-                    <p class="help-block text-danger"></p>
-                  </div>
-                  <div class="form-group">
-                    <input class="form-control" id="phone" type="tel" placeholder="Your Phone *" required data-validation-required-message="Please enter your phone number.">
-                    <p class="help-block text-danger"></p>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <textarea class="form-control" id="message" placeholder="Your Message *" required data-validation-required-message="Please enter a message."></textarea>
-                    <p class="help-block text-danger"></p>
-                  </div>
-                </div>
-                <div class="clearfix"></div>
+        <div class="container">
+            <div class="row">
                 <div class="col-lg-12 text-center">
-                  <div id="success"></div>
-                  <button id="sendMessageButton" class="btn btn-primary btn-xl text-uppercase" type="submit">Send Message</button>
+                    <h2 class="section-heading text-uppercase">Contact Us</h2>
+                    <h3 class="section-subheading text-muted">Drop us an email if you have any enquiries.</h3>
                 </div>
-              </div>
-            </form>
-          </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <form id="contactForm" name="sentMessage" novalidate>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input class="form-control" id="name" type="text" placeholder="Your Name *" required data-validation-required-message="Please enter your name.">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" id="email" type="email" placeholder="Your Email *" required data-validation-required-message="Please enter your email address.">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" id="phone" type="tel" placeholder="Your Phone *" required data-validation-required-message="Please enter your phone number.">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <textarea class="form-control" id="message" placeholder="Your Message *" required data-validation-required-message="Please enter a message."></textarea>
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-lg-12 text-center">
+                                <div id="success"></div>
+                                <button id="sendMessageButton" class="btn btn-primary btn-xl text-uppercase" type="submit">Send Message</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
-
-    <!-- Footer -->
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-4">
-            <span class="copyright">Copyright &copy; 2018 CS2102 Team 8 AY 2017/2018. All rights reserved.</span> 
-		 </div>
-        </div>
-      </div>
-    </footer>
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -325,7 +348,10 @@
 
     <!-- Custom scripts for this template -->
     <script src="js/crowdfunding.min.js"></script>
-
-  </body>
+</body>
 
 </html>
+
+<?php
+    include 'footer.php'
+?>

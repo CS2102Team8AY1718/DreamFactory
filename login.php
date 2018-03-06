@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html lang="en-US">
-    <head>
-        <meta charset="UTF-8">
-        <title>Login Page</title>
-    </head>
-    <body>
-
 <?php
 
 require 'connect.php';
@@ -28,19 +20,23 @@ if (isset($_POST['login'])) {
         // Calculate password_hash (SHA256 to the original password)
         $password_hash = hash('sha256', $password);
 
-        $sql_select_user = "SELECT full_name FROM users WHERE email='$email' AND password_hash='$password_hash'";
+        $sql_select_user = "SELECT user_id, email, full_name FROM users WHERE email='$email' AND password_hash='$password_hash'";
 
         // Check for sql error
         if ($result = $conn->query($sql_select_user)) {
             // Check if user is found
             if ($result->num_rows != 0) {
                 $row = $result->fetch_assoc();
-                echo "Login successful. Welcome back, " . $row['full_name'] . ".";
+
+                // Login successful, initialize session information
+                session_start();
+                $_SESSION['user_id'] = $row['user_id'];
+                $_SESSION['email'] = $row['email'];
+                $_SESSION['full_name'] = $row['full_name'];
+
+                header("Location: " . $_GET['redirect'] . "?logged_in");
+
                 $retry = false;
-				session_start();
-				$_SESSION['logged_in'] =true;
-				$_SESSION['email']=$email;
-				$_SESSION['fullname']=$row['full_name'];
             } else {
                 echo "Invalid email and password combination.";
                 $retry = true;
@@ -61,7 +57,7 @@ if (!isset($retry) || $retry) {
     echo '
         <fieldset>
             <legend align="center">Login</legend>
-            <form action="?" method="post">
+            <form action="?redirect=' . $_GET['redirect'] . '" method="post">
                 <table align="center">
                     <tr>
                         <td>Email:</td>
@@ -76,13 +72,18 @@ if (!isset($retry) || $retry) {
                     </tr>
                 </table>
             </form>
-        </fieldset>';
+        </fieldset>
+    ';
 }
 
 include 'footer.php';
 
 ?>
-	<a href="register.php">Register</a>
-    <a href="search.php">Search</a>
-    </body>
+
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <title>Login Page</title>
+    </head>
 </html>
