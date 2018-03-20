@@ -1,9 +1,43 @@
 <!DOCTYPE html>
 <html lang="en-US">
     <head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+	
         <meta charset="UTF-8">
         <title>Registration Page</title>
+		
+	<!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="css/crowdfunding.min.css" rel="stylesheet">
     </head>
+	
+	<body>
+	<!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Contact form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/crowdfunding.min.js"></script>
+	</body>
+	
 </html>
 
 <?php
@@ -58,30 +92,39 @@ if (isset($_POST['register'])) {
 if (!isset($retry) || $retry) {
     echo '
         <fieldset>
-            <legend align="center">Register</legend>
+            <div class="container">
+            <div class="row">
+            <div class="col-lg-12 text-center">
+			<br>
+			<h2 class="section-heading text-uppercase">Register</h2>
             <form action="?" method="post">
                 <table align="center">
                     <tr>
+					<br>
                         <td>Email:</td>
-                        <td><input type="text" name="email" value="' . (isset($email) ? $email : '') . '"></td>
+                        <td><input class="form-control" id="name" type="text" name="email" value="' . (isset($email) ? $email : '') . '"></td>
                     </tr>
                     <tr>
                         <td>Password:</td>
-                        <td><input type="password" name="password"></td>
+                        <td><input class="form-control" id="name" type="password" name="password"></td>
                     </tr>
                     <tr>
                         <td>Re-enter Password:</td>
-                        <td><input type="password" name = "confirm_password"></td>
+                        <td><input class="form-control" id="name" type="password" name = "confirm_password"></td>
                     </tr>
                     <tr>
                         <td>Full Name:</td>
-                        <td><input type="text" name ="full_name" value="' . (isset($full_name) ? $full_name : '') . '"></td>
+                        <td><input class="form-control" id="name" type="text" name ="full_name" value="' . (isset($full_name) ? $full_name : '') . '"></td>
                     </tr>
                     <tr>
-                        <td colspan=2 align="right"><input type="submit" name="register" value="Register"></td>
+                        <td colspan=2 align="right"><br> <button id="sendMessageButton" class="btn btn-primary btn-xl text-uppercase" type="submit" name="register" value="Register">Register</button></td>
                     </tr>
                 </table>
+				<br>
             </form>
+			</div>
+			</div>
+			</div>
         </fieldset>';
 }
 
