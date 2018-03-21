@@ -1,9 +1,45 @@
 <!DOCTYPE html>
 <html lang="en-US">
     <head>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+	
         <meta charset="UTF-8">
         <title>Create Project</title>
+
+	<!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="css/crowdfunding.min.css" rel="stylesheet">
+	
     </head>
+	
+	<body>
+	<!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Contact form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/crowdfunding.min.js"></script>
+	</body>
+	
 </html>
 
 <?php
@@ -53,7 +89,7 @@ if (isset($_POST['create'])) {
         //create project
         $sql_create_project = "INSERT INTO projects (user_id, title, image_url, description, end_datetime, category, funding_goal) VALUES ('$user_id', '$title', '$image_url', '$description', '$end_date', '$category', '$goal')";
         if ($conn->query($sql_create_project)){
-            echo "Successfully created project";
+            echo "Successfully created project! Go back to <a href='homepage.php'>homepage</a>.";
             $retry = false;
         } else {
             echo $conn->error;
@@ -77,46 +113,54 @@ if (!isset($retry) || $retry) {
 
     echo '
         <fieldset>
-            <legend align="center">Create Project</legend>
+            <div class="container">
+            <div class="row">
+            <div class="col-lg-12 text-center">
+			<br>
+			<h2 class="section-heading text-uppercase">Create Project</h2>
             <form action="?" method="post">
                 <table align="center">
+				<br>
                     <tr>
                         <td>Title:</td>
-                        <td><input type="text" name="title" value="' . (isset($title) ? $title : '') . '"></td>
+                        <td><input class="form-control" id="name" type="text" name="title" value="' . (isset($title) ? $title : '') . '"></td>
                     </tr>
                     <tr>
                         <td>Image URL:</td>
-                        <td><input type="text" name="image_url" value="' . (isset($image_url) ? $image_url : '') . '"></td>
+                        <td><input class="form-control" id="name" type="text" name="image_url" value="' . (isset($image_url) ? $image_url : '') . '"></td>
                     </tr>
                     <tr>
                         <td>Description:</td>
-                        <td><input type="text" name="description" value="' . (isset($description) ? $description : '') . '"></td>
+                        <td><input class="form-control" id="name" type="text" name="description" value="' . (isset($description) ? $description : '') . '"></td>
                     </tr>
                     <tr>
                         <td>End Date:</td>
-                        <td><input type="date" name="end_date" value="' . (isset($end_date) ? $end_date : '') . '"></td>
+                        <td><input class="form-control" id="name" type="date" name="end_date" value="' . (isset($end_date) ? $end_date : '') . '"></td>
                     </tr>
                     <tr>
                         <td>Category:</td>
                         <td>
-                            <select name="category">'
+                            <select class="form-control" id="name" name="category">'
                             . $category_list .
                             '</select>
                         </td>
                     </tr>
                     <tr>
                         <td>Funding Goal ($):</td>
-                        <td><input type="number" name="goal" value="' . (isset($goal) ? $goal : '') . '"></td>
+                        <td><input class="form-control" id="name" type="number" name="goal" value="' . (isset($goal) ? $goal : '') . '"></td>
                     </tr>
                     <!--<tr>
                         <td>Keyword:</td>
-                        <td><input type="text" name="keyword"></td>
+                        <td><input class="form-control" id="name" type="text" name="keyword"></td>
                     </tr>-->
                     <tr>
-                        <td colspan=2 align="right"><input type="submit" name="create" value="Create"></td>
+                        <td colspan=2 align="right"><br> <button id="sendMessageButton" class="btn btn-primary btn-xl text-uppercase" type="submit" name="create" value="Create">Create</button></td>
                     </tr>
                 </table>
             </form>
+			</div>
+			</div>
+			</div>
         </fieldset>
     ';
 }

@@ -215,112 +215,153 @@ if ($result = $conn->query($sql_select_unfunded_projects)) {
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+	
     <meta charset="UTF-8">
     <title>Search projects</title>
+	
+	<!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="css/crowdfunding.min.css" rel="stylesheet">
+	
 </head>
 <body>
     <form method="get" action=?>
-    Search: <input type="text" name="search_key">
+	<br> &nbsp; <!--&nbsp; is for indentation -->
+    Search: <input style="width: 200px; height: 35px" type="text" name="search_key">
     </form>
 
     <br>
 
     <fieldset>
-        <legend align="center">Ongoing Projects</legend>
+	    <div class="col-lg-12 text-center">
+        <h2 class="section-heading text-uppercase">Ongoing Projects</h2>
         <table align="center" border=1>
             <tr>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Keywords</th>
-                <th>Fundings</th>
-                <th>Goal</th>
-                <th>Deadline</th>
-                <th>Fund</th>
-                <th>Delete</th>
+                <th>&nbsp; Title &nbsp;</th>
+                <th>&nbsp; Category &nbsp;</th>
+                <th>&nbsp; Keywords &nbsp;</th>
+                <th>&nbsp; Fundings &nbsp;</th>
+                <th>&nbsp; Goal &nbsp;</th>
+                <th>&nbsp; Deadline &nbsp;</th>
+                <th>&nbsp; Fund &nbsp;</th>
+                <th>&nbsp; Delete &nbsp;</th>
             </tr>
             <?php
 
             foreach ($ongoing_projects as $ongoing_project) {
                 echo '<tr align="center">';
-                echo '<td>' . $ongoing_project['title'] . '</td>';
-                echo '<td><a href=?category=' . urlencode($ongoing_project['category']) . '>' . $ongoing_project['category'] . '</a></td>';
-                echo '<td>' . $ongoing_project['keyword_links'] . '</td>';
-                echo '<td>' . $ongoing_project['funding_amount'] . '</td>';
-                echo '<td>' . $ongoing_project['funding_goal'] . '</td>';
-                echo '<td>' . $ongoing_project['end_datetime'] . '</td>';
-                echo '<td><a href="fund_project.php?project_id=' . $ongoing_project['project_id'] . '">+</a></td>';
-                echo '<td><a href="delete_project.php?project_id=' . $ongoing_project['project_id'] . '&redirect=browse_projects.php">X</a></td>';
+                echo '<td> &nbsp;' . $ongoing_project['title'] . '&nbsp;</td>';
+                echo '<td> &nbsp;<a href=?category=' . urlencode($ongoing_project['category']) . '>' . $ongoing_project['category'] . '&nbsp;</a></td>';
+                echo '<td> &nbsp;' . $ongoing_project['keyword_links'] . '&nbsp;</td>';
+                echo '<td> &nbsp;' . $ongoing_project['funding_amount'] . '&nbsp;</td>';
+                echo '<td> &nbsp;' . $ongoing_project['funding_goal'] . '&nbsp;</td>';
+                echo '<td> &nbsp;' . $ongoing_project['end_datetime'] . '&nbsp;</td>';
+                echo '<td> &nbsp;<a href="fund_project.php?project_id=' . $ongoing_project['project_id'] . '">+&nbsp;</a></td>';
+                echo '<td> &nbsp;<a href="delete_project.php?project_id=' . $ongoing_project['project_id'] . '&redirect=browse_projects.php">X&nbsp;</a></td>';
                 echo '</tr>';
             }
 
             ?>
         </table>
+		</div>
     </fieldset>
 
     <br>
 
     <fieldset>
-        <legend align="center">Funded Projects</legend>
+		<div class="col-lg-12 text-center">
+		<h2 class="section-heading text-uppercase">Funded Projects</h2>
         <table align="center" border=1>
             <tr>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Keywords</th>
-                <th>Fundings</th>
-                <th>Goal</th>
-                <th>Deadline</th>
-                <th>Fund</th>
-                <th>Delete</th>
+                <th>&nbsp; Title &nbsp;</th>
+                <th>&nbsp; Category &nbsp;</th>
+                <th>&nbsp; Keywords &nbsp;</th>
+                <th>&nbsp; Fundings &nbsp;</th>
+                <th>&nbsp; Goal &nbsp;</th>
+                <th>&nbsp; Deadline &nbsp;</th>
+                <th>&nbsp; Fund &nbsp;</th>
+                <th>&nbsp; Delete &nbsp;</th>
             </tr>
 
             <?php
             foreach ($funded_projects as $funded_project) {
                 echo '<tr align="center">';
-                echo '<td>' . $funded_project['title'] . '</td>';
-                echo '<td><a href=?category=' . urlencode($funded_project['category']) . '>' . $funded_project['category'] . '</a></td>';
-                echo '<td>' . $funded_project['keyword_links'] . '</td>';
-                echo '<td>' . $funded_project['funding_amount'] . '</td>';
-                echo '<td>' . $funded_project['funding_goal'] . '</td>';
-                echo '<td>' . $funded_project['end_datetime'] . '</td>';
-                echo '<td><a href="fund_project.php?project_id=' . $funded_project['project_id'] . '">+</a></td>';
-                echo '<td><a href="delete_project.php?project_id=' . $funded_project['project_id'] . '&redirect=browse_projects.php">X</a></td>';
+                echo '<td> &nbsp;' . $funded_project['title'] . '&nbsp;</td>';
+                echo '<td> &nbsp;<a href=?category=' . urlencode($funded_project['category']) . '>' . $funded_project['category'] . '&nbsp;</a></td>';
+                echo '<td> &nbsp;' . $funded_project['keyword_links'] . '&nbsp;</td>';
+                echo '<td> &nbsp;' . $funded_project['funding_amount'] . '&nbsp;</td>';
+                echo '<td> &nbsp;' . $funded_project['funding_goal'] . '&nbsp;</td>';
+                echo '<td> &nbsp;' . $funded_project['end_datetime'] . '&nbsp;</td>';
+                echo '<td> &nbsp;<a href="fund_project.php?project_id=' . $funded_project['project_id'] . '">+&nbsp;</a></td>';
+                echo '<td> &nbsp;<a href="delete_project.php?project_id=' . $funded_project['project_id'] . '&redirect=browse_projects.php">X&nbsp;</a></td>';
                 echo '</tr>';
             }
             ?>
         </table>
+		</div>
     </fieldset>
 
     <br>
 
     <fieldset>
-        <legend align="center">Unfunded Projects</legend>
+		<div class="col-lg-12 text-center">
+		<h2 class="section-heading text-uppercase">Unfunded Projects</h2>
         <table align="center" border=1>
             <tr>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Keywords</th>
-                <th>Fundings</th>
-                <th>Goal</th>
-                <th>Deadline</th>
-                <th>Fund</th>
-                <th>Delete</th>
+                <th>&nbsp; Title &nbsp;</th>
+                <th>&nbsp; Category &nbsp;</th>
+                <th>&nbsp; Keywords &nbsp;</th>
+                <th>&nbsp; Fundings &nbsp;</th>
+                <th>&nbsp; Goal &nbsp;</th>
+                <th>&nbsp; Deadline &nbsp;</th>
+                <th>&nbsp; Fund &nbsp;</th>
+                <th>&nbsp; Delete &nbsp;</th>
             </tr>
 
             <?php
             foreach ($unfunded_projects as $unfunded_project) {
                 echo '<tr align="center">';
-                echo '<td>' . $unfunded_project['title'] . '</td>';
-                echo '<td><a href=?category=' . urlencode($unfunded_project['category']) . '>' . $unfunded_project['category'] . '</a></td>';
-                echo '<td>' . $unfunded_project['keyword_links'] . '</td>';
-                echo '<td>' . $unfunded_project['funding_amount'] . '</td>';
-                echo '<td>' . $unfunded_project['funding_goal'] . '</td>';
-                echo '<td>' . $unfunded_project['end_datetime'] . '</td>';
-                echo '<td><a href="fund_project.php?project_id=' . $unfunded_project['project_id'] . '">+</a></td>';
-                echo '<td><a href="delete_project.php?project_id=' . $unfunded_project['project_id'] . '&redirect=browse_projects.php">X</a></td>';
+                echo '<td> &nbsp;' . $unfunded_project['title'] . '&nbsp;</td>';
+                echo '<td> &nbsp;<a href=?category=' . urlencode($unfunded_project['category']) . '>' . $unfunded_project['category'] . '&nbsp;</a></td>';
+                echo '<td> &nbsp;' . $unfunded_project['keyword_links'] . '&nbsp;</td>';
+                echo '<td> &nbsp;' . $unfunded_project['funding_amount'] . '&nbsp;</td>';
+                echo '<td> &nbsp;' . $unfunded_project['funding_goal'] . '&nbsp;</td>';
+                echo '<td> &nbsp;' . $unfunded_project['end_datetime'] . '&nbsp;</td>';
+                echo '<td> &nbsp;<a href="fund_project.php?project_id=' . $unfunded_project['project_id'] . '">+&nbsp;</a></td>';
+                echo '<td> &nbsp;<a href="delete_project.php?project_id=' . $unfunded_project['project_id'] . '&redirect=browse_projects.php">X&nbsp;</a></td>';
                 echo '</tr>';
             }
             ?>
         </table>
+		</div>
     </fieldset>
+	
+	<!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Contact form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/crowdfunding.min.js"></script>
+	
 </body>
 </html>
