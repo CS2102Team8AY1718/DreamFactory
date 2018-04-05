@@ -271,6 +271,7 @@ if ($result = $conn->query($sql_select_unfunded_projects)) {
                 echo '<td> &nbsp;' . $ongoing_project['end_datetime'] . '&nbsp;</td>';
                 echo '<td> &nbsp;<a href="fund_project.php?project_id=' . $ongoing_project['project_id'] . '">+&nbsp;</a></td>';
                 echo '<td> &nbsp;<a href="delete_project.php?project_id=' . $ongoing_project['project_id'] . '&redirect=browse_projects.php">X&nbsp;</a></td>';
+				echo '<td> &nbsp;<a href="view_project.php?project_id=' . $ongoing_project['project_id'] . '">VIEW&nbsp;</a></td>';
                 echo '</tr>';
             }
 
@@ -307,6 +308,7 @@ if ($result = $conn->query($sql_select_unfunded_projects)) {
                 echo '<td> &nbsp;' . $funded_project['end_datetime'] . '&nbsp;</td>';
                 echo '<td> &nbsp;<a href="fund_project.php?project_id=' . $funded_project['project_id'] . '">+&nbsp;</a></td>';
                 echo '<td> &nbsp;<a href="delete_project.php?project_id=' . $funded_project['project_id'] . '&redirect=browse_projects.php">X&nbsp;</a></td>';
+				echo '<td> &nbsp;<a href="view_project.php?project_id=' . $funded_project['project_id'] . '">VIEW&nbsp;</a></td>';
                 echo '</tr>';
             }
             ?>
@@ -342,6 +344,7 @@ if ($result = $conn->query($sql_select_unfunded_projects)) {
                 echo '<td> &nbsp;' . $unfunded_project['end_datetime'] . '&nbsp;</td>';
                 echo '<td> &nbsp;<a href="fund_project.php?project_id=' . $unfunded_project['project_id'] . '">+&nbsp;</a></td>';
                 echo '<td> &nbsp;<a href="delete_project.php?project_id=' . $unfunded_project['project_id'] . '&redirect=browse_projects.php">X&nbsp;</a></td>';
+				echo '<td> &nbsp;<a href="view_project.php?project_id=' . $unfunded_project['project_id'] . '">VIEW&nbsp;</a></td>';
                 echo '</tr>';
             }
             ?>
