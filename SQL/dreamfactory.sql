@@ -44,7 +44,7 @@ DROP TABLE IF EXISTS `fundings`;
 CREATE TABLE IF NOT EXISTS `fundings` (
   `user_id` int(11) NOT NULL,
   `project_id` int(11) NOT NULL,
-  `amount` int(11) NOT NULL,
+  `amount` int(11) UNSIGNED NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`,`project_id`),
   KEY `user_id` (`user_id`),
