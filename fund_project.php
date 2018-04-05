@@ -29,6 +29,8 @@ if (isset($_POST['fund'])) {
         if ($result = $conn->query($sql_insert_funding)) {
             echo 'Your funding has been recorded.';
             $prev_amount = $fund_amount;
+        } else {
+          echo 'Invalid amount.';
         }
     }
 }
