@@ -1,5 +1,5 @@
 <?php
-    
+
     session_start();
     require 'connect.php';
 
@@ -223,14 +223,16 @@
                 foreach ($funded_projects as $funded_project) {
                     echo '
                         <div class="col-md-4 col-sm-6 portfolio-item">
+                        <div align="center">
                             <a class="portfolio-link" data-toggle="modal" href="project1">
-                                <img class="img-fluid" src="img/portfolio/01-thumbnail.jpg" alt="">
+                                <img class="img-fluid" src="' . $funded_project['image_url'] . '" style="max-height: 200px; width: auto;">
                             </a>
                             <div class="portfolio-caption">
                                 <br>
                                 <h4 align="center">' . $funded_project['title'] . '</h4>
                                 <p align="center" class="text-muted">' . $funded_project['keyword_links'] . '</p>
-                                <p align="center" class="text-muted">' . 100 * $funded_project['funding_amount'] / $funded_project['funding_goal'] . '% funded (<b>$' . $funded_project['funding_amount'] . '.00</b> of <b>$' . $funded_project['funding_goal'] . '.00)</b></p>
+                                <p align="center" class="text-muted">' . ceil (100 * $funded_project['funding_amount'] / $funded_project['funding_goal'] ). '% funded (<b>$' . $funded_project['funding_amount'] . '.00</b> of <b>$' . $funded_project['funding_goal'] . '.00)</b></p>
+                            </div>
                             </div>
                         </div>
                     ';
@@ -279,7 +281,7 @@
                     </span>
                     <h4 class="service-heading">Projects</h4>
                     <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
-                </div>		
+                </div>
             </div>
 
             <br> <br>
