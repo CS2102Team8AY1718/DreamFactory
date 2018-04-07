@@ -132,7 +132,7 @@ if (isset($search_key)) {
         ($sql_select_unfunded_projects) AS f_p
     WHERE
         title LIKE '%$search_key%'
-    "; 
+    ";
 } else if (isset($category)) {
     $sql_select_ongoing_projects = "
     SELECT
@@ -219,10 +219,10 @@ if ($result = $conn->query($sql_select_unfunded_projects)) {
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
-	
+
     <meta charset="UTF-8">
     <title>Search projects</title>
-	
+
 	<!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -235,18 +235,61 @@ if ($result = $conn->query($sql_select_unfunded_projects)) {
 
     <!-- Custom styles for this template -->
     <link href="css/crowdfunding.min.css" rel="stylesheet">
-	
+
 </head>
-<body>
+
+<body id="page-top">
+    <?php
+        include 'header.php';
+    ?>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color:Black;" id="mainNav">
+      <div class="container">
+          <a class="navbar-brand js-scroll-trigger" href="homepage.php">DreamFactory</a>
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+              Menu
+              <i class="fa fa-bars"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+              <ul class="navbar-nav text-uppercase ml-auto">
+
+                  <li class="nav-item">
+                      <a class="nav-link js-scroll-trigger" href="#ongoingProjects">Ongoing Projects</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link js-scroll-trigger" href="#fundedProjects">Funded Projects</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link js-scroll-trigger" href="create_project.php">Create Project</a>
+                  </li>
+                  <li class="nav-item">
+                      <?php
+
+                      if (isset($_SESSION['email'])) {
+                          echo '<a class="nav-link js-scroll-trigger" href="logout.php">Logout</a>';
+                      } else {
+                          echo '<a class="nav-link js-scroll-trigger" href="login.php?redirect=homepage.php">Login</a>';
+                      }
+
+                      ?>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </nav>
+
+      <section id="ongoingProjects">
+          <div class="container">
+              <div class="row">
+                  <div class="col-lg-12 text-center">
     <form method="get" action=?>
 	<br> &nbsp; <!--&nbsp; is for indentation -->
     Search: <input style="width: 200px; height: 35px" type="text" name="search_key">
     </form>
 
     <br>
+    <br>
 
-    <fieldset>
-	    <div class="col-lg-12 text-center">
         <h2 class="section-heading text-uppercase">Ongoing Projects</h2>
         <table align="center" border=1>
             <tr>
@@ -278,12 +321,14 @@ if ($result = $conn->query($sql_select_unfunded_projects)) {
             ?>
         </table>
 		</div>
-    </fieldset>
+  </div>
+</div>
+</section>
 
-    <br>
-
-    <fieldset>
-		<div class="col-lg-12 text-center">
+<section id="fundedProjects">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
 		<h2 class="section-heading text-uppercase">Funded Projects</h2>
         <table align="center" border=1>
             <tr>
@@ -313,45 +358,11 @@ if ($result = $conn->query($sql_select_unfunded_projects)) {
             }
             ?>
         </table>
-		</div>
-    </fieldset>
+      </div>
+    </div>
+  </div>
+  </section>
 
-    <br>
-
-    <fieldset>
-		<div class="col-lg-12 text-center">
-		<h2 class="section-heading text-uppercase">Unfunded Projects</h2>
-        <table align="center" border=1>
-            <tr>
-                <th>&nbsp; Title &nbsp;</th>
-                <th>&nbsp; Category &nbsp;</th>
-                <th>&nbsp; Keywords &nbsp;</th>
-                <th>&nbsp; Fundings &nbsp;</th>
-                <th>&nbsp; Goal &nbsp;</th>
-                <th>&nbsp; Deadline &nbsp;</th>
-                <th>&nbsp; Fund &nbsp;</th>
-                <th>&nbsp; Delete &nbsp;</th>
-            </tr>
-
-            <?php
-            foreach ($unfunded_projects as $unfunded_project) {
-                echo '<tr align="center">';
-                echo '<td> &nbsp;' . $unfunded_project['title'] . '&nbsp;</td>';
-                echo '<td> &nbsp;<a href=?category=' . urlencode($unfunded_project['category']) . '>' . $unfunded_project['category'] . '&nbsp;</a></td>';
-                echo '<td> &nbsp;' . $unfunded_project['keyword_links'] . '&nbsp;</td>';
-                echo '<td> &nbsp;' . $unfunded_project['funding_amount'] . '&nbsp;</td>';
-                echo '<td> &nbsp;' . $unfunded_project['funding_goal'] . '&nbsp;</td>';
-                echo '<td> &nbsp;' . $unfunded_project['end_datetime'] . '&nbsp;</td>';
-                echo '<td> &nbsp;<a href="fund_project.php?project_id=' . $unfunded_project['project_id'] . '">+&nbsp;</a></td>';
-                echo '<td> &nbsp;<a href="delete_project.php?project_id=' . $unfunded_project['project_id'] . '&redirect=browse_projects.php">X&nbsp;</a></td>';
-				echo '<td> &nbsp;<a href="view_project.php?project_id=' . $unfunded_project['project_id'] . '">VIEW&nbsp;</a></td>';
-                echo '</tr>';
-            }
-            ?>
-        </table>
-		</div>
-    </fieldset>
-	
 	<!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -365,6 +376,6 @@ if ($result = $conn->query($sql_select_unfunded_projects)) {
 
     <!-- Custom scripts for this template -->
     <script src="js/crowdfunding.min.js"></script>
-	
+
 </body>
 </html>
