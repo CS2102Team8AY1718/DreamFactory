@@ -19,7 +19,6 @@ require 'connect.php';
 				$full_name=$row['full_name'];
 				$title=$row['title'];
 				$image_url=$row['image_url'];
-				echo($image_url);
 				$description=$row['description'];
 				$end_datetime=$row['end_datetime'];
 				$category=$row['category'];
@@ -52,9 +51,5 @@ require 'connect.php';
 	echo ("end date:"); echo($end_datetime);
 	
 	
-?>
-
-<img 
-
-</body>
+?></body>
 </html>
