@@ -10,7 +10,7 @@ require 'connect.php';
     if(isset($_GET["project_id"]))
     {
         $project_id = $_GET["project_id"];
-        $sql= "Select u.full_name, p.title, p.image_url, p.description, p.end_datetime, p.category, p.funding_goal, SUM(f.amount) as total from projects p natural join fundings f natural join users u where project_id='$project_id'";
+        $sql = "SELECT u.full_name, p.title, p.image_url, p.description, p.end_datetime, p.category, p.funding_goal, SUM(f.amount) as total from projects p natural join users u inner join fundings f on p.project_id = f.project_id where p.project_id='$project_id'";
 		//check sql for error
 		if ($result = $conn->query($sql)){
 			//Check result is not null and store vars
@@ -24,7 +24,6 @@ require 'connect.php';
 				$category=$row['category'];
 				$funding_goal=$row['funding_goal'];
 				$total=$row['total'];
-				
 			}else{
 				echo "project does not exist";
 			}
