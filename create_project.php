@@ -92,28 +92,31 @@ if (isset($_POST['create'])) {
         //create project
         $sql_create_project = "INSERT INTO projects (user_id, title, image_url, description, end_datetime, category, funding_goal) VALUES ('$user_id', '$title', '$image_url', '$description', '$end_date', '$category', '$goal')";
 		//add keywords to keywords table
-		$sql_insert_keyword = "INSERT INTO keywords (keyword) values ('$insertKeyword')";
-		$sql_insert_into_project_keywords = "INSERT INTO project_keywords(project_id,keyword) VALUES ('$pid','$insertKeyword)'";
-		$sql_get_pid ="SELECT project_id as from projects p where title='$title' and user_id='$user_id'";
-								
+		
+		
+		$sql_get_pid ="SELECT project_id from projects p where title='$title'";
+		$pid = null;						
         if ($conn->query($sql_create_project)){
 			echo "Successfully created project! Go back to <a href='homepage.php'>homepage</a>.";
 			//get the new pid
 			if($result = $conn ->query($sql_get_pid)){
 				$row  = $result->fetch_assoc();
 				$pid = $row['project_id'];
+				echo $pid;	
 			}
 			foreach ($keywordarr as $insertKeyword){
-				if($conn ->query($sql_insert_keyword){
+				$sql_insert_keyword = "INSERT INTO keywords (keyword) values ('$insertKeyword')";
+				if($conn ->query($sql_insert_keyword)){
 					echo "Successfully added keywords";
 					
 				}else{
 					//keyword exists
 				}
-				if($conn->query($sql_insert_into_project_keywords){
-					echo "Your project is searchable! Go back to <a href='homepage.php'>homepage</a>.";
+				$sql_insert_into_project_keywords = "INSERT INTO project_keywords(project_id,keyword) VALUES ('$pid','$insertKeyword')";
+				
+				if($conn->query($sql_insert_into_project_keywords)){
 				}else{
-					echo "error occurred";
+					
 				}
 			}
             $retry = false;
@@ -175,10 +178,10 @@ if (!isset($retry) || $retry) {
                         <td>Funding Goal ($):</td>
                         <td><input class="form-control" id="name" type="number" name="goal" value="' . (isset($goal) ? $goal : '') . '"></td>
                     </tr>
-                    <!--<tr>
-                        <td>Keyword:</td>
+                    <tr>
+                        <td>Keyword(seperated by commas):</td>
                         <td><input class="form-control" id="name" type="text" name="keyword"></td>
-                    </tr>-->
+                    </tr>
                     <tr>
                         <td colspan=2 align="right"><br> <button id="sendMessageButton" class="btn btn-primary btn-xl text-uppercase" type="submit" name="create" value="Create">Create</button></td>
                     </tr>
