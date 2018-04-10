@@ -58,7 +58,8 @@ if (isset($_POST['create'])) {
     $end_date = mysqli_real_escape_string($conn, $_POST["end_date"]);
     $category = mysqli_real_escape_string($conn, $_POST['category']);
     $goal = $_POST['goal'];
-    //$keyword = trim(mysqli_real_escape_string($conn, $_POST['keyword']));
+    $keyword = trim(mysqli_real_escape_string($conn, $_POST['keyword']));
+	$keywordarr= explode(",", $keyword);
     
     $error_message = "";
 
@@ -85,11 +86,36 @@ if (isset($_POST['create'])) {
     if (empty($error_message)) {
         // Get user_id from session info
         $user_id = $_SESSION['user_id'];
+		
+		
 
         //create project
         $sql_create_project = "INSERT INTO projects (user_id, title, image_url, description, end_datetime, category, funding_goal) VALUES ('$user_id', '$title', '$image_url', '$description', '$end_date', '$category', '$goal')";
+		//add keywords to keywords table
+		$sql_insert_keyword = "INSERT INTO keywords (keyword) values ('$insertKeyword')";
+		$sql_insert_into_project_keywords = "INSERT INTO project_keywords(project_id,keyword) VALUES ('$pid','$insertKeyword)'";
+		$sql_get_pid ="SELECT project_id as from projects p where title='$title' and user_id='$user_id'";
+								
         if ($conn->query($sql_create_project)){
-            echo "Successfully created project! Go back to <a href='homepage.php'>homepage</a>.";
+			echo "Successfully created project! Go back to <a href='homepage.php'>homepage</a>.";
+			//get the new pid
+			if($result = $conn ->query($sql_get_pid)){
+				$row  = $result->fetch_assoc();
+				$pid = $row['project_id'];
+			}
+			foreach ($keywordarr as $insertKeyword){
+				if($conn ->query($sql_insert_keyword){
+					echo "Successfully added keywords";
+					
+				}else{
+					//keyword exists
+				}
+				if($conn->query($sql_insert_into_project_keywords){
+					echo "Your project is searchable! Go back to <a href='homepage.php'>homepage</a>.";
+				}else{
+					echo "error occurred";
+				}
+			}
             $retry = false;
         } else {
             echo $conn->error;
