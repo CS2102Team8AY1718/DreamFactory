@@ -3,6 +3,12 @@
     session_start();
     require 'connect.php';
 
+    $sql_total_users = "SELECT count(*) AS count FROM users";
+
+    $sql_total_projects = "SELECT count(*) AS count FROM projects";
+
+    $sql_total_amount = "SELECT sum(amount) AS amount FROM fundings";
+
     $sql_select_ongoing_projects = "
     SELECT
         p.project_id,
@@ -69,6 +75,27 @@
         end_datetime DESC
     LIMIT 3
     ";
+
+    if ($result = $conn->query($sql_total_users)) {
+        $total_users = array();
+        while ($row = $result->fetch_assoc()) {
+            $total_users[0]=$row['count'];
+        }
+    }
+
+    if ($result = $conn->query($sql_total_projects)) {
+        $total_projects = array();
+        while ($row = $result->fetch_assoc()) {
+            $total_projects[0]=$row['count'];
+        }
+    }
+
+    if ($result = $conn->query($sql_total_amount)) {
+        $total_amount = array();
+        while ($row = $result->fetch_assoc()) {
+            $total_amount[0]=$row['amount'];
+        }
+    }
 
     if ($result = $conn->query($sql_select_ongoing_projects)) {
         $ongoing_projects = array();
@@ -204,7 +231,6 @@
             <center>
                 <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="browse_projects.php">Browse more...</a>
             </center>
-
         </div>
     </section>
 
@@ -254,7 +280,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading text-uppercase">Create Project</h2>
-                    <h3 class="section-subheading text-muted">Kick start your startup with fundings now.</h3>
+                    <h3 class="section-subheading text-muted">Kick start your dream with DreamFactory!</h3>
                 </div>
             </div>
             <div class="row text-center">
@@ -263,24 +289,36 @@
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
                         <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="service-heading">E-Commerce</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                    <h4 class="service-heading">Total Number of Users</h4>
+                    <?php
+                    echo '
+                    <h2 class="text-muted">'  . $total_users[0] . ' users</p>
+                    ';
+                    ?>
                 </div>
                 <div class="col-md-4">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
                         <i class="fa fa-laptop fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="service-heading">Start Ups</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                    <h4 class="service-heading">Total Number of Projects</h4>
+                    <?php
+                    echo '
+                    <h2 class="text-muted">'  . $total_projects[0] . ' projects</p>
+                    ';
+                    ?>
                 </div>
                 <div class="col-md-4">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
                         <i class="fa fa-lock fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="service-heading">Projects</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                    <h4 class="service-heading">Average Funding Amount</h4>
+                    <?php
+                    echo '
+                    <h2 class="text-muted">$'  . $total_amount[0] / $total_projects[0] . ' per project</p>
+                    ';
+                    ?>
                 </div>
             </div>
 
