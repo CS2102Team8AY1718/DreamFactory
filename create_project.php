@@ -151,23 +151,23 @@ if (!isset($retry) || $retry) {
                 <table align="center">
 				<br>
                     <tr>
-                        <td>Title:</td>
+                        <td align="left">Title:</td>
                         <td><input class="form-control" id="name" type="text" name="title" value="' . (isset($title) ? $title : '') . '"></td>
                     </tr>
                     <tr>
-                        <td>Image URL:</td>
+                        <td align="left">Image URL:</td>
                         <td><input class="form-control" id="name" type="text" name="image_url" value="' . (isset($image_url) ? $image_url : '') . '"></td>
                     </tr>
                     <tr>
-                        <td>Description:</td>
+                        <td align="left">Description:</td>
                         <td><input class="form-control" id="name" type="text" name="description" value="' . (isset($description) ? $description : '') . '"></td>
                     </tr>
                     <tr>
-                        <td>End Date:</td>
+                        <td align="left">End Date:</td>
                         <td><input class="form-control" id="name" type="date" name="end_date" value="' . (isset($end_date) ? $end_date : '') . '"></td>
                     </tr>
                     <tr>
-                        <td>Category:</td>
+                        <td align="left">Category:</td>
                         <td>
                             <select class="form-control" id="name" name="category">'
                             . $category_list .
@@ -175,11 +175,11 @@ if (!isset($retry) || $retry) {
                         </td>
                     </tr>
                     <tr>
-                        <td>Funding Goal ($):</td>
+                        <td align="left">Funding Goal ($):</td>
                         <td><input class="form-control" id="name" type="number" name="goal" value="' . (isset($goal) ? $goal : '') . '"></td>
                     </tr>
                     <tr>
-                        <td>Keyword(seperated by commas):</td>
+                        <td align="left">Keyword(seperated by commas):</td>
                         <td><input class="form-control" id="name" type="text" name="keyword"></td>
                     </tr>
                     <tr>
