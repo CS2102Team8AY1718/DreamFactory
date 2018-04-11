@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 09, 2018 at 01:19 PM
+-- Generation Time: Apr 10, 2018 at 03:16 PM
 -- Server version: 5.7.21-log
 -- PHP Version: 5.6.31
 
@@ -76,6 +76,7 @@ CREATE TABLE IF NOT EXISTS `fundings` (
 
 INSERT INTO `fundings` (`user_id`, `project_id`, `amount`, `timestamp`) VALUES
 (1, 1, 2000, '2018-04-09 11:57:28'),
+(1, 12, 34000, '2018-04-10 07:09:26'),
 (5, 1, 12000, '2018-04-09 13:01:53'),
 (6, 3, 25000, '2018-04-09 12:48:08'),
 (7, 2, 9000, '2018-04-09 13:02:41'),
@@ -112,6 +113,7 @@ INSERT INTO `keywords` (`keyword`) VALUES
 ('dating'),
 ('delivery'),
 ('expert'),
+('final'),
 ('fire'),
 ('food'),
 ('funding'),
@@ -121,6 +123,7 @@ INSERT INTO `keywords` (`keyword`) VALUES
 ('loop'),
 ('money'),
 ('music'),
+('project'),
 ('score'),
 ('sky'),
 ('song'),
@@ -146,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   UNIQUE KEY `title` (`title`),
   KEY `category` (`category`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `projects`
@@ -160,9 +163,9 @@ INSERT INTO `projects` (`project_id`, `user_id`, `title`, `image_url`, `descript
 (5, 7, 'Mixcloud', 'http://icons.iconarchive.com/icons/dtafalonso/yosemite-flat/512/Music-icon.png', 'Music record start up', '2018-04-03 00:00:00', 'Entertainment', 70000),
 (6, 8, 'Dating Life', 'https://ih1.redbubble.net/image.30156406.3433/sticker,375x360-bg,ffffff.png', 'Dating enhancement application the start up is focusing on', '2018-12-28 00:00:00', 'Social Network', 50000),
 (7, 9, 'Foodies Deliver', 'https://www.shareicon.net/download/2016/11/25/856584_food_512x512.png', 'Start up doing food delivery services', '2018-12-19 00:00:00', 'Food', 60000),
-(8, 1, 'Crossknowledge', 'https://pngtree.com/so/child-education', 'Education start up', '2018-06-28 00:00:00', 'Education', 37000),
+(8, 1, 'Crossknowledge', 'https://png.icons8.com/ios/1600/knowledge-sharing.png', 'Education start up', '2018-06-28 00:00:00', 'Education', 37000),
 (9, 10, 'Funding Circle', 'https://labs.robinhood.org/wp-content/uploads/2015/07/FUNDING.png?x94397', 'VC company for smaller entreupreneurs', '2018-12-17 00:00:00', 'Financials', 57000),
-(10, 11, 'Songkick', 'https://www.shareicon.net/musical-note-quaver-music-and-multimedia-music-interface-music-player-song-855103', 'Music industry entertainment', '2018-01-03 00:00:00', 'Entertainment', 12000),
+(10, 11, 'Songkick', 'https://png.pngtree.com/element_origin_min_pic/16/08/30/2057c5817bcf859.jpg', 'Music industry entertainment', '2018-01-03 00:00:00', 'Entertainment', 12000),
 (11, 16, 'Songtify', 'https://upload.wikimedia.org/wikipedia/en/thumb/a/af/Song_logo.svg/1200px-Song_logo.svg.png', 'Music streaming services company', '2018-12-27 00:00:00', 'Media', 80000),
 (12, 19, 'Experteer', 'https://www.shareicon.net/download/2016/07/03/790220_school_512x512.png', 'Education that offers any course.', '2019-04-26 00:00:00', 'Education', 124000),
 (13, 5, 'GetJar', 'https://png.icons8.com/color/1600/cash-in-hand.png', 'Saving investments for you', '2019-04-20 00:00:00', 'Financials', 65000),
@@ -234,7 +237,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `session_exp` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
@@ -263,7 +266,8 @@ INSERT INTO `users` (`user_id`, `email`, `password_hash`, `full_name`, `privileg
 (20, 'ivy@email.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'Ivy', 0, NULL, NULL),
 (21, 'june@email.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'June', 0, NULL, NULL),
 (22, 'kane@email.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'Kane', 0, NULL, NULL),
-(23, 'zachary@email.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'Zachary', 0, NULL, NULL);
+(23, 'zachary@email.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'Zachary', 0, NULL, NULL),
+(24, 'user100@email.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'user100', 0, NULL, NULL);
 
 --
 -- Constraints for dumped tables
