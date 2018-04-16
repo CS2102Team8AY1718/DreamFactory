@@ -191,12 +191,13 @@ if ($result = $conn->query($sql_select_funded_projects)) {
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="create_project.php">Create Project</a>
                     </li>
+
                     <li class="nav-item">
                         <?php
                         if (isset($_SESSION['email'])) {
                           echo '<a class="nav-link js-scroll-trigger" href="logout.php">Logout</a>';
                         } else {
-                          echo '<a class="nav-link js-scroll-trigger" href="login.php?redirect=homepage.php">Login</a>';
+                          echo '<a class="nav-link js-scroll-trigger" href="login.php?redirect=browse_projects.php">Login</a>';
                         }
                         ?>
                     </li>
@@ -264,7 +265,7 @@ if ($result = $conn->query($sql_select_funded_projects)) {
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h2 class="section-heading text-uppercase">Accomplished Projects</h2>
+                    <h2 class="section-heading text-uppercase">Funded Projects</h2>
                     <table align="center" border=1 cellpadding=5>
                         <tr>
                             <th>Title</th>
