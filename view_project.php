@@ -43,7 +43,7 @@
                       <a class="nav-link js-scroll-trigger" href="homepage.php">Home</a>
                   </li>
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="browse_projects.php">Projects</a>
+                        <a class="nav-link js-scroll-trigger" href="browse_projects.php">Back to Projects</a>
                     </li>
                 </ul>
             </div>
@@ -73,7 +73,7 @@ require 'connect.php';
 				$funding_goal=$row['funding_goal'];
 				$total=$row['total'];
 			}else{
-				echo "project does not exist";
+				echo "Project does not exist";
 			}
 		}else{
 			echo "An sql error has occurred";

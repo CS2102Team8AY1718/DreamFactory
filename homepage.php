@@ -159,7 +159,7 @@
                         <a class="nav-link js-scroll-trigger" href="#ongoingProjects">Ongoing Projects</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="#accomplishedProjects">Accomplished Projects</a>
+                        <a class="nav-link js-scroll-trigger" href="#fundedProjects">Funded Projects</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="#createProject">Create Project</a>
@@ -167,6 +167,7 @@
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="#contact">Contact Us</a>
                     </li>
+                    
                     <li class="nav-item">
                         <?php
 
@@ -236,11 +237,11 @@
 
     <!-- Accomplished Projects Grid -->
     <!-- sql query to list top 3 projects that just ended -->
-    <section id="accomplishedProjects">
+    <section id="fundedProjects">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h2 class="section-heading text-uppercase">Accomplished Projects</h2>
+                    <h2 class="section-heading text-uppercase">Funded Projects</h2>
                 </div>
             </div>
             <div class="row">

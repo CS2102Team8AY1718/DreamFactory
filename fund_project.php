@@ -79,8 +79,12 @@ if (isset($_POST['fund'])) {
                     <ul class="navbar-nav text-uppercase ml-auto">
 
                         <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger" href="homepage.php">Back to Homepage</a>
+                            <a class="nav-link js-scroll-trigger" href="homepage.php">Home</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="browse_projects.php">Back to Projects</a>
+                        </li>
+
                         <li class="nav-item">
                             <?php
 

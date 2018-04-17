@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en-US">
     <head>
-	
+
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
-	
+
         <meta charset="UTF-8">
         <title>Create Project</title>
 
@@ -21,10 +21,34 @@
 
     <!-- Custom styles for this template -->
     <link href="css/crowdfunding.min.css" rel="stylesheet">
-	
+
     </head>
-	
-	<body>
+
+	<body id="page-top">
+      <?php
+          include 'header.php';
+      ?>
+      <!-- Navigation -->
+      <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color:Black;" id="mainNav">
+          <div class="container">
+              <a class="navbar-brand js-scroll-trigger" href="#page-top">DreamFactory</a>
+              <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                  Menu
+                  <i class="fa fa-bars"></i>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarResponsive">
+                  <ul class="navbar-nav text-uppercase ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="homepage.php">Home</a>
+                    </li>
+                      <li class="nav-item">
+                          <a class="nav-link js-scroll-trigger" href="browse_projects.php">Back to Projects</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </nav>
+
 	<!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -39,7 +63,7 @@
     <!-- Custom scripts for this template -->
     <script src="js/crowdfunding.min.js"></script>
 	</body>
-	
+
 </html>
 
 <?php
@@ -60,7 +84,7 @@ if (isset($_POST['create'])) {
     $goal = $_POST['goal'];
     $keyword = trim(mysqli_real_escape_string($conn, $_POST['keyword']));
 	$keywordarr= explode(",", $keyword);
-    
+
     $error_message = "";
 
     if (empty($title)) {
@@ -86,37 +110,37 @@ if (isset($_POST['create'])) {
     if (empty($error_message)) {
         // Get user_id from session info
         $user_id = $_SESSION['user_id'];
-		
-		
+
+
 
         //create project
         $sql_create_project = "INSERT INTO projects (user_id, title, image_url, description, end_datetime, category, funding_goal) VALUES ('$user_id', '$title', '$image_url', '$description', '$end_date', '$category', '$goal')";
 		//add keywords to keywords table
-		
-		
+
+
 		$sql_get_pid ="SELECT project_id from projects p where title='$title'";
-		$pid = null;						
+		$pid = null;
         if ($conn->query($sql_create_project)){
 			echo "Successfully created project! Go back to <a href='homepage.php'>homepage</a>.";
 			//get the new pid
 			if($result = $conn ->query($sql_get_pid)){
 				$row  = $result->fetch_assoc();
 				$pid = $row['project_id'];
-				echo $pid;	
+				echo $pid;
 			}
 			foreach ($keywordarr as $insertKeyword){
 				$sql_insert_keyword = "INSERT INTO keywords (keyword) values ('$insertKeyword')";
 				if($conn ->query($sql_insert_keyword)){
 					echo "Successfully added keywords";
-					
+
 				}else{
 					//keyword exists
 				}
 				$sql_insert_into_project_keywords = "INSERT INTO project_keywords(project_id,keyword) VALUES ('$pid','$insertKeyword')";
-				
+
 				if($conn->query($sql_insert_into_project_keywords)){
 				}else{
-					
+
 				}
 			}
             $retry = false;
@@ -142,6 +166,7 @@ if (!isset($retry) || $retry) {
 
     echo '
         <fieldset>
+        <section>
             <div class="container">
             <div class="row">
             <div class="col-lg-12 text-center">
@@ -190,7 +215,9 @@ if (!isset($retry) || $retry) {
 			</div>
 			</div>
 			</div>
+      </section>
         </fieldset>
+
     ';
 }
 
